@@ -23,19 +23,26 @@ def int2time(integer):
     return
 
 
-def days2interval(days,times):
+def days2interval(section,code):
     ''' Documentation:
         function that takes in days and times and converts it into a time interval with units of min
         multiple intervals for multple days
 
 
         inputs:
+        - section = dictionary containing all information about the specific section
+        - code = course code as a string
+
         - days = list of strings abreviations for days of the set {'M','T','W','R','F'}
         - times = string of time interval 'hr:min am - hr:min pm'
 
         output:
         - result = list of intervals as tuples [(0,1),(1440,1490),...] 
     '''
+    days = section['days']
+    times = section['time']
+    name = code + ': ' + section['number']
+    
     interval = times.split(' - ')
 
     start_t = datetime.datetime.strptime(interval[0],'%I:%M%p')
@@ -49,7 +56,7 @@ def days2interval(days,times):
     for day in days:
         d = d_dict[day]
 
-        result.append((start+d,end+d)) 
+        result.append((start+d,end+d,name)) 
 
     return result
 
@@ -164,7 +171,7 @@ def nextCombo(current,maximum):
 
     return current
 
-def recScheduler(current,classes,index,current_names):
+def recScheduler(current,classes,index):
     '''
     Function (used recursively) that takes a list of classes and tries to create a schedule
     Uses a Depth First Search esque method by resursively going through each class in the list.   
@@ -194,9 +201,9 @@ def recScheduler(current,classes,index,current_names):
         new_intervals = []
         new_sections = []
         for key,ind in sec_counters.items():
-            intervals = days2interval(secs[key][ind]['days'],secs[key][ind]['time'])
-            new_sections.append(new_class['code'] + ': ' + secs[key][ind]['number'])
-            new_intervals.extend(intervals)                                                     ### Do something with this ###
+            intervals = days2interval(secs[key][ind],new_class['code'])
+            # new_sections.append(new_class['code'] + ': ' + secs[key][ind]['number'])
+            new_intervals.extend(intervals)
 
         # -- Checking if the intervals conflict with the current schedule -- #
         conflict = conflictCheck(current,new_intervals)
@@ -213,14 +220,14 @@ def recScheduler(current,classes,index,current_names):
             temp_intervals.extend(current)
             temp_intervals.extend(new_intervals)
 
-            temp_sections = []
-            temp_sections.extend(current_names)
-            temp_sections.extend(new_sections)
+            # temp_sections = []
+            # temp_sections.extend(current_names)
+            # temp_sections.extend(new_sections)
             
             # -- recursion -- #
             if index < len(classes)-1: # this is not the last class in the list
                 # print('recursion', index)
-                next_intervals,next_sections = recScheduler(temp_intervals,classes,index+1,temp_sections)
+                next_intervals = recScheduler(temp_intervals,classes,index+1)
                 if next_intervals == -1: # if it could not schedule the next class(es)
                     worked = False
                     sec_counters = nextCombo(sec_counters,sec_totals) # increment sections
@@ -232,21 +239,21 @@ def recScheduler(current,classes,index,current_names):
                     result = new_intervals
                     result.extend(next_intervals)
 
-                    result_sections = new_sections
-                    result_sections.extend(next_sections)
+                    # result_sections = new_sections
+                    # result_sections.extend(next_sections)
                     if index == 0 and current != []:
                         current.extend(result)
-                        current_names.extend(result_sections)
-                        return current,current_names
-                    return result,result_sections
+                        # current_names.extend(result_sections)
+                        return current
+                    return result
 
             else: # last class to schedule (no recursion)
                 worked = True ## possibly redundant
                 if index == 0 and current != []:
                         current.extend(new_intervals)
-                        current_names.extend(new_sections)
-                        return current,current_names
-                return new_intervals,new_sections
+                        # current_names.extend(new_sections)
+                        return current
+                return new_intervals
 
 
         else: # there was a conflict
@@ -257,20 +264,21 @@ def recScheduler(current,classes,index,current_names):
                 break
                 
 
-    if worked: ##possibly redundant
-        print('I used this!')
-        return current,current_names
-
     # - if 'worked' is false after the while loop that means every combo was tried - #
     else:
-        return -1,-1
+        return -1
 
+
+
+
+# first = classes[0]
+# [(880.0, 890.0),(2320.0,2330.0),(3760.0,3770.0)]
 
 
 # classes = ws.WS_main()
-# first = classes[0]
-# [(880.0, 890.0),(2320.0,2330.0),(3760.0,3770.0)]
-# i,s = recScheduler([],classes,0,[]) 
+# i = recScheduler([],classes,0) 
 # print(i)
+
+
 # print()
 # print(s)

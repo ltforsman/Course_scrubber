@@ -31,12 +31,15 @@ def runSearch():
 
     classes = ws.WS_user2_local(selected_classes)
 
-    intervals, sections = sch.recScheduler([],classes,0,[])
+    intervals = sch.recScheduler([],classes,0)
 
     r = 5
-    for section in sections:
-        section = Label(text = section)
-        section.grid(row = r,column = 1, columnspan = 2)
+    for interval in intervals:
+        section = str(interval[2])
+        inter = str(interval[0]) + ' : ' + str(interval[1])
+        t = section + ' - ' + inter
+        i = Label(text = t)
+        i.grid(row = r,column = 1, columnspan = 2)
         r += 1
     
 
