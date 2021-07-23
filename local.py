@@ -1,11 +1,11 @@
 from tkinter import *
-import Scheduling as sc
+import web_scrubbing as ws
+import Scheduling as sch
 
 root = Tk(className = ' Cornell Course Scheduler ')
-root.geometry('+100+100')
 
 Label(root,text='',height=5, width=3).grid(row = 0, column = 0)
-Label(root,text='',height=3, width=3).grid(row = 10, column = 10)
+Label(root,text='',height=3, width=3).grid(row = 100, column = 10)
 
 title = Label(root,text = 'Welcome to the Cornell Course Scheduling Tool!',font = ('Arial',12))
 title.grid(row = 0, column = 1, columnspan = 2)
@@ -24,9 +24,23 @@ user.grid(row = 4,column = 1)
 
 
 def runSearch():
-    test = Label(text = 'test')
-    test.grid(row = 5,column = 1,columnspan = 2)
+    selected_classes = user.get()
+
+    # test = Label(text = selected_classes)
+    # test.grid(row = 5,column = 1,columnspan = 2)
+
+    classes = ws.WS_user2_local(selected_classes)
+
+    intervals, sections = sch.recScheduler([],classes,0,[])
+
+    r = 5
+    for section in sections:
+        section = Label(text = section)
+        section.grid(row = r,column = 1, columnspan = 2)
+        r += 1
     
+
+
 
 search = Button(root,text = 'Search',command = runSearch)
 search.grid(row = 4, column = 2)

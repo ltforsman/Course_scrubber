@@ -266,12 +266,11 @@ def recScheduler(current,classes,index,current_names):
         return -1,-1
 
 
-# scheduler()
 
-classes = ws.WS_main()
+# classes = ws.WS_main()
 # first = classes[0]
 # [(880.0, 890.0),(2320.0,2330.0),(3760.0,3770.0)]
-i,s = recScheduler([],classes,0,[]) 
-print(i)
-print()
-print(s)
+# i,s = recScheduler([],classes,0,[]) 
+# print(i)
+# print()
+# print(s)

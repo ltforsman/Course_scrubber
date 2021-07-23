@@ -20,6 +20,8 @@ def WS_main(subject = 'ECE', visual = False):
 
     return selected_classes
 
+
+
 def singleSubject(subject = 'ECE'):
     classes = grabClasses(subject)
     selected_classes = WS_user(classes,subject)
@@ -181,6 +183,8 @@ def WS_user(classes,subject = 'ECE'):
 
     return selected
 
+
+
 def grabClasses2(subject,requested):
     ''' Documentation
         Function that creates a list of all the requested courses from one subject by
@@ -321,8 +325,6 @@ def grabClasses2(subject,requested):
  #
     return selected
 
-
-
 def WS_user2():
     '''
     Function that asks the user for which classes they want to schedule together and returns a list of classes(+info)
@@ -361,6 +363,45 @@ def WS_user2():
     
     return uclasses
 
+
+    
+
+def WS_user2_local(user_classes):
+    '''
+    Function that asks the user for which classes they want to schedule together and returns a list of classes(+info)
+    Updated to be able to take classes from multiple subjects
+
+    input:
+     - user_classes = string containing the user input in format ' {subject abreviation}_{course number}, ...'
+    output:
+     - selected = list of the classes(+info) that the user asked for [any combination of subjects]
+
+    '''
+
+    user_classes = user_classes.upper()
+    user_classes = user_classes.split(',')
+    user_classes = [c.lstrip().rstrip() for c in user_classes]
+    user_classes.sort()
+
+    # print('\n',user_classes,'\n')
+
+    # - group by subject - #
+    grouped_classes = [list(i) for j,i in groupby(user_classes,lambda a: a.split(' ')[0])]
+
+    # print('\n',grouped_classes,'\n')
+
+    print('\nFetching Classes...')
+    uclasses = []
+    for sub_courses in grouped_classes:
+        subject = sub_courses[0].split(' ')[0]
+        subject_classes = grabClasses2(subject,sub_courses)
+        if subject_classes == -1:
+            return -1
+        uclasses.extend(subject_classes)
+    
+    print('Done')
+    
+    return uclasses
 
 # WS_main()
 # WS_user2()
