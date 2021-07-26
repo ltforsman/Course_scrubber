@@ -174,7 +174,10 @@ def nextCombo(current,maximum):
 def recScheduler(current,classes,index):
     '''
     Function (used recursively) that takes a list of classes and tries to create a schedule
-    Uses a Depth First Search esque method by resursively going through each class in the list.   
+    Uses a Depth First Search esque method by resursively going through each class in the list.  
+
+    output:
+     -  returns a list of intervals with section name 
     '''
     test_mode = False
 
@@ -219,31 +222,23 @@ def recScheduler(current,classes,index):
             temp_intervals = [] #temporarily create a schedule with the new sections
             temp_intervals.extend(current)
             temp_intervals.extend(new_intervals)
-
-            # temp_sections = []
-            # temp_sections.extend(current_names)
-            # temp_sections.extend(new_sections)
             
             # -- recursion -- #
             if index < len(classes)-1: # this is not the last class in the list
-                # print('recursion', index)
                 next_intervals = recScheduler(temp_intervals,classes,index+1)
                 if next_intervals == -1: # if it could not schedule the next class(es)
                     worked = False
                     sec_counters = nextCombo(sec_counters,sec_totals) # increment sections
                     if sec_counters == -1:
                         break
-                    # if no sec_counters left break
+                        # if no sec_counters left break
 
                 else: # recursion returned a schedule
                     result = new_intervals
                     result.extend(next_intervals)
 
-                    # result_sections = new_sections
-                    # result_sections.extend(next_sections)
                     if index == 0 and current != []:
                         current.extend(result)
-                        # current_names.extend(result_sections)
                         return current
                     return result
 
@@ -251,7 +246,6 @@ def recScheduler(current,classes,index):
                 worked = True ## possibly redundant
                 if index == 0 and current != []:
                         current.extend(new_intervals)
-                        # current_names.extend(new_sections)
                         return current
                 return new_intervals
 
@@ -265,11 +259,51 @@ def recScheduler(current,classes,index):
                 
 
     # - if 'worked' is false after the while loop that means every combo was tried - #
-    else:
-        return -1
+    return -1
+
+
+def readable(schedule, military = False):
+    days = {0:'Mon',1:'Tues',2:'Wed',3:'Thur',4:'Fri'}
+    schedule = sorted(schedule, key=lambda tup: tup[0])
+
+    readable_schedule = {'Mon':[],'Tues':[],'Wed':[],'Thur':[],'Fri':[]}
+
+    for interval in schedule:
+        name = str(interval[2])
+        start = int(interval[0])
+        end = int(interval[1])
+
+        d_min = start//1440
+        d = days[d_min]
+
+        start = start - 1440*d_min
+        # print('{:02d}:{:02d}'.format(*divmod(start, 60)))
+        end = end - 1440*d_min
+
+        start_hr = (start%1440)//60
+        start_min = start-(start_hr*60)
+        s_str = str(start_hr)+':'+str(start_min)
+
+        end_hr = (end%1440)//60
+        end_min = end-(end_hr*60)
+        e_str = str(end_hr)+':'+str(end_min)
+
+
+        if not military:
+            s_str = datetime.datetime.strptime(s_str, '%H:%M')
+            s_str = s_str.strftime('%I:%M %p')
+
+            e_str = datetime.datetime.strptime(e_str, '%H:%M')
+            e_str = e_str.strftime('%I:%M %p')
+
+        
+
+        readable_schedule[d].append((name,s_str,e_str))
+        # print(start_hr,start_min)
 
 
 
+    return readable_schedule
 
 # first = classes[0]
 # [(880.0, 890.0),(2320.0,2330.0),(3760.0,3770.0)]
@@ -277,8 +311,8 @@ def recScheduler(current,classes,index):
 
 # classes = ws.WS_main()
 # i = recScheduler([],classes,0) 
-# print(i)
-
+# rs = readable(i)
+# print(rs)
 
 # print()
 # print(s)
