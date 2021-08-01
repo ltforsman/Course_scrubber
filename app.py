@@ -8,7 +8,8 @@ def results():
     user_input = request.args.get("classes", None)
     # u = {}
     # u['user'] = user_input
-    return f'<h1> {user_input} </h1>'
+    return render_template('results.html',result = user_input)
+    # return f'<h1> {user_input} </h1>'
 
 
 @app.route('/')
