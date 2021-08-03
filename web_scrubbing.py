@@ -366,7 +366,7 @@ def WS_user2():
 
     
 
-def WS_user2_local(user_classes):
+def WS_user2_noText(user_classes):
     '''
     Function that asks the user for which classes they want to schedule together and returns a list of classes(+info)
     Updated to be able to take classes from multiple subjects

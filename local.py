@@ -29,7 +29,7 @@ def runSearch():
     # test = Label(text = selected_classes)
     # test.grid(row = 5,column = 1,columnspan = 2)
 
-    classes = ws.WS_user2_local(selected_classes)
+    classes = ws.WS_user2_noText(selected_classes)
 
     intervals = sch.recScheduler([],classes,0)
 
