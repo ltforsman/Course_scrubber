@@ -1,14 +1,22 @@
 from flask import Flask, request, render_template, redirect,jsonify
 import Scheduling as sch
+import web_scrubbing as ws
 
 app = Flask(__name__)
 
 @app.route('/results/', methods = ['GET'])
 def results():
     user_input = request.args.get("classes", None)
+
+    classes = ws.WS_user2_noText(user_input)
+
+    intervals = sch.recScheduler([],classes,0)
+
+    schedule = sch.readable(intervals)
+
     # u = {}
     # u['user'] = user_input
-    return render_template('results.html',result = user_input)
+    return render_template('results.html',result = schedule)
     # return f'<h1> {user_input} </h1>'
 
 
