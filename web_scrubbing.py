@@ -224,7 +224,6 @@ def grabClasses2(subject,requested):
 
  # - access website - #
     text = "https://classes.cornell.edu/browse/roster/FA21/subject/%s" % subject
-    print(text)
     result = requests.get(text)
     src = result.content
 
