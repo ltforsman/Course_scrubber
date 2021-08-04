@@ -8,6 +8,8 @@ This is a summer personal project to learn and hone coding skills. The project i
 2. **Run locally**:
  You can download the source code from this github repo if you would like to run the software locally. To run, with python 3, run the local.py file and a separate window will popup. 
 
+ To get the required libraries to run the source code use the line `pip install -r requirements.txt`. I recommend using a virtual environment in the project directory, but simply installing the dependancies to your local computer works as well.
+
 These two methods use the same algorithm and differ only in the presentation.
 
 Some features that I would like to add include:
