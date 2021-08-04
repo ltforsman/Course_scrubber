@@ -11,8 +11,8 @@ This is a summer personal project to learn and hone coding skills. The project i
 These two methods use the same algorithm and differ only in the presentation.
 
 Some features that I would like to add include:
-- [] cleaner display of the resulting schedule 
-- [] the ability to chose times when you do not want to have class
-- [] better handling of when no schedule can be found
-- [] displaying which sections had conflict
+- [ ] cleaner display of the resulting schedule 
+- [ ] the ability to chose times when you do not want to have class
+- [ ] better handling of when no schedule can be found
+- [ ] displaying which sections had conflict
 
